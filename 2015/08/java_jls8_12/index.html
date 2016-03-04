@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java语言规范简介 - 执行 | 52programming</title>
+  <meta name="author" content="Jeff Hu">
+  
+  <meta name="description" content="JVM启动JVM通过调用指定类的main方法并传入一个参数（字符串数组）来启动执行。准确语义参数JVM规范第五章。以下均以Test类为例。
+加载类首次尝试执行类Test的main方法时发现该类未被加载，即JVM不包含该类的二进制表示。JVM利用一个类加载器尝试寻找该二进制表示。若未找到，则抛出错误。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Java语言规范简介 - 执行"/>
+  <meta property="og:site_name" content="52programming"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="52programming" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">52programming</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/category">Categories</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-26T15:35:00.000Z"><a href="/2015/08/java_jls8_12/">2015-08-26</a></time>
+      
+      
+  
+    <h1 class="title">Java语言规范简介 - 执行</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="JVM启动">JVM启动</h2><p>JVM通过调用指定类的main方法并传入一个参数（字符串数组）来启动执行。准确语义参数JVM规范第五章。<br>以下均以Test类为例。</p>
+<h3 id="加载类">加载类</h3><p>首次尝试执行类Test的main方法时发现该类未被加载，即JVM不包含该类的二进制表示。JVM利用一个类加载器尝试寻找该二进制表示。若未找到，则抛出错误。</p>
+<h3 id="链接：验证、准备、（可选）解析">链接：验证、准备、（可选）解析</h3><p>类加载之后，必须在调用main方法之前初始化。所有的类或接口类型必须在初始化之前进行链接。链接过程引入验证、准备和（可选）解析。<br>验证过程使用符号表检查加载的二进制表示形式是否正确。验证过程还检查代码的语义正确性。<br>准备过程涉及静态存储和JVM内部使用的数据结构（如方法表）的分配。<br>解析过程是指通过加载所涉及的类和接口来检查对这些类和接口的符号引用是否正确。<br>解析步骤在初始化链接过程时可选。<br>一种实现是递归解析所使用的符号引用，类似静态链接（编译后程序文件包含完整链接版本的程序）。<br>一种实现只在实际用到时才解析该符号引用，它代表了一种懒惰式解析。边执行边解析，也可能有些执行不到的引用一直不会得到解析。</p>
+<h3 id="初始化">初始化</h3><p>只有在类初始化之后才会执行main方法。<br>初始化过程由类变量初始化器和静态初始化器以文本顺序执行。类初始化前提是父类初始化，一直上溯到根父类（即Object）。</p>
+<h3 id="调用">调用</h3><p>main方法必须public、static和void，参数是字符串数组形式。如String[] args和String… args。</p>
+<h2 id="加载类和接口">加载类和接口</h2><p>加载即以指定名称来寻找类或接口的二进制格式，有可能是即时计算；但更一般的过程是由编译器从代码中提取二进制表示，并构造一个类对象。<br>类或接口的二进制格式正式来说即JVM规范描述的class文件格式，但其他格式也有可能支持，前提是满足在下一章节中描述的需求。类ClassLoader的defineClass方法可以从class文件格式的二进制表示中构造类对象。</p>
+<p>表现好的类加载器应该具有以下属性：</p>
+<ul>
+<li>相同名称总是返回同一类对象</li>
+<li>类加载器L1委托类加载器L2加载类C，则作为类C的直接父类或直接父接口，或类C的域，或类C方法或构造器的正式参数，或方法的返回类型的类T。L1和L2应该返回同一类对象。</li>
+</ul>
+<h3 id="加载过程">加载过程</h3><p>加载过程由ClassLoader类及其子类实现。不同子类可能实现了不同的加载策略。类加载器也可能缓存类和接口的二进制表示，基于使用预期采用预取方式，或者同时加载一组相关联类。这些动作对于运行的应用来说并不完全透明，比如有可能因为类加载器加载了旧版本的类，因而无法发现新编译的版本。类加载器的职责只是在没有预取或组加载时抛出加载错误。<br>类加载出错时，会抛出LinkageError的以下子类实例：</p>
+<ul>
+<li>ClassCircularityError: 类（接口）无法加载的原因是该类（接口）是自己父类（父接口）</li>
+<li>ClassFormatError: 类（接口）的二进制数据有问题</li>
+<li>NoClassDefFoundError: 相关类加载器中无定义</li>
+</ul>
+<p>加载过程涉及新的数据结构的内存分配，所以可能引发OutOfMemoryError。</p>
+<h3 id="链接类（接口）">链接类（接口）</h3><p>链接过程是指将类（接口）的二进制形式合并为JVM的运行时状态，以使其能够被执行。加载过程必须在链接之前进行。<br>链接过程涉及：验证、准备、符号引用的解析<br>链接的准确语义在JVM规范第五章中给出。<br>初始化之前必须完成验证和准备过程。链接过程中抛出错误可以在需要链接的时候进行。<br>例如，一种实现可以选择只在符号引用有用到时才进行解析（懒惰解析），或者在验证类时一次性解析所有符号引用（静态解析）。这意味着在一些实现里，类（接口）初始化后，仍然可能有解析过程。<br>链接过程涉及新的数据结构的内存分配，也可能引发OutOfMemoryError。</p>
+<h4 id="二进制验证">二进制验证</h4><p>验证过程确保二进制表示在结构上是正确的。例如，它检查每个指令有合法操作码，每个分支指令指向另一个指令的开始而非中间，每个方法提供了结构上正确的签名，每个指令遵循JVM语言的类型约束。<br>验证过程出错会抛出LinkageError子类异常：</p>
+<ul>
+<li>VerifyError: 验证失败</li>
+</ul>
+<h4 id="准备过程">准备过程</h4><p>创建静态域（类变量和常量），初始化为默认值。不需要执行任何源代码。静态域的显式初始化器是作为初始化过程的一部分执行，而不是在准备过程。</p>
+<p><em><span style="color: grey">注：部分词汇可能翻译不准确</span></em></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Java文档/">Java文档</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Java/">Java</a>, <a href="/tags/文档/">文档</a>
+  </div>
+
+        <!--%- partial('post/share') %-->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:52programming.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Java文档/">Java文档</a><small>2</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/categories/个人/">个人</a><small>1</small></li>
+  
+    <li><a href="/categories/其他/">其他</a><small>1</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>1</small></li>
+  
+    <li><a href="/categories/数据与日志/">数据与日志</a><small>1</small></li>
+  
+    <li><a href="/categories/网络/">网络</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux命令/">Linux命令</a><small>2</small></li>
+  
+    <li><a href="/tags/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/tags/Spark-SQL/">Spark SQL</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/resume/">resume</a><small>1</small></li>
+  
+    <li><a href="/tags/tcpip/">tcpip</a><small>1</small></li>
+  
+    <li><a href="/tags/文档/">文档</a><small>2</small></li>
+  
+    <li><a href="/tags/日志/">日志</a><small>1</small></li>
+  
+    <li><a href="/tags/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Jeff Hu
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+</body>
+</html>

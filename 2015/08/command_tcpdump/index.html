@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux命令 - tcpdump | 52programming</title>
+  <meta name="author" content="Jeff Hu">
+  
+  <meta name="description" content="12345678tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [ -B buffer_size ] [ -c count ]               [ -C file_size ] [ -G rotate_seconds ] [ -F file ]          ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux命令 - tcpdump"/>
+  <meta property="og:site_name" content="52programming"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="52programming" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">52programming</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/category">Categories</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-20T04:28:00.000Z"><a href="/2015/08/command_tcpdump/">2015-08-20</a></time>
+      
+      
+  
+    <h1 class="title">Linux命令 - tcpdump</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tcpdump [ -AdDefIKlLnNOpqRStuUvxX ] [ -B buffer_size ] [ -c count ]</span><br><span class="line">               [ -C file_size ] [ -G rotate_seconds ] [ -F file ]</span><br><span class="line">               [ -i interface ] [ -m module ] [ -M secret ]</span><br><span class="line">               [ -r file ] [ <span class="operator">-s</span> snaplen ] [ -T <span class="built_in">type</span> ] [ -w file ]</span><br><span class="line">               [ -W filecount ]</span><br><span class="line">               [ -E spi@ipaddr algo:secret,...  ]</span><br><span class="line">               [ -y datalinktype ] [ -z postrotate-command ] [ -Z user ]</span><br><span class="line">               [ expression ]</span><br></pre></td></tr></table></figure>
+<h2 id="描述"><strong>描述</strong></h2><p><code>-w</code>标志保存packet数据到指定文件，<code>-r</code>读取指定文件中的packet数据。<br>指定expression的情况下，只有与其匹配才会被处理。  </p>
+<p><code>-c</code>指定接收包的总数量。若不指定<code>-c</code>，则tcpdump会一直处理packet直至接收到<em>SIGINT</em>或<em>SIGTERM</em>信号。  </p>
+<p>tcpdump报告以下内容：</p>
+<ul>
+<li>捕获的包数量</li>
+<li>过滤器拦截的包数量</li>
+<li>被kernel抛弃的包数量（由于缓冲空间不足）</li>
+</ul>
+<p><span style="color:red"><strong>SIGINFO…</strong></span></p>
+<p>从网络接口读取packets需要特殊的权限，参考<code>pcap (3PCAP)</code>帮助手册。</p>
+<h2 id="选项"><strong>选项</strong></h2><p><code>-A</code>: 以ASCII格式打印每个packet(不包含数据链路层头部)。捕获web网页时比较好用。</p>
+<p><code>-B</code>: 设置OS的capture缓存大小为buffer_size。</p>
+<p><code>-c</code>: 接收指定数目packets后退出。</p>
+<p><code>-C</code>: 将原始packet写入文件前，检查文件是否超过指定的file_size，若超过则关闭当前文件并新创建一个文件，新创建的文件名由<code>-w</code>指定名称及数字序号组成，起始值为1。file_size单位为1,000,000字节（不是1,048,576字节）。<br><strong>注意</strong>: 使用<code>-Z</code>选项(默认启用)时，在打开第一个文件之前抛弃权限。</p>
+<p><code>-d</code>: 以易读格式dump编译后的packet-matching代码到标准输出并停止。</p>
+<p><code>-dd</code>: 以C程序片段形式dump packet-matching代码。</p>
+<p><code>-ddd</code>: Dump packet-matching code as decimal numbers (preceded with a count).</p>
+<p><code>-D</code>: 打印tcpdump可以截包的可用网络接口列表。对于每个网络接口，打印一个数字、接口名字，可能有接口描述信息。接口名称或数字可以由<code>-i</code>标志来指定截包接口。<br>若tcpdump构建于缺少pcap_findalldevs()函数的旧版本libpcap之上，则有可能不支持<code>-D</code>标志。</p>
+<p><code>-e</code>: 打印数据链路层头部。</p>
+<p><code>-E</code>: 使用<u>spi@ipaddr</u>  <u>algo:secret</u> 来解密发往addr且包含Security Parameter Index值spi的IPsec ESP packets。</p>
+<pre><code>This combination may be repeated <span class="keyword">with</span> comma <span class="keyword">or</span> newline seperation.
+Note <span class="keyword">that</span> setting <span class="keyword">the</span> secret <span class="keyword">for</span> IPv4 ESP packets <span class="keyword">is</span> supported <span class="keyword">at</span> this <span class="property">time</span>.
+Algorithms may be des-cbc, <span class="number">3</span>des-cbc, blowfish-cbc, rc3-cbc, cast128-cbc, <span class="keyword">or</span> none.  The default  <span class="keyword">is</span>  des-cbc.   The  ability  <span class="keyword">to</span> decrypt packets <span class="keyword">is</span> only present <span class="keyword">if</span> tcpdump was compiled <span class="keyword">with</span> cryptography enabled.
+secret <span class="keyword">is</span> <span class="keyword">the</span> ASCII <span class="type">text</span> <span class="keyword">for</span> ESP secret key.  If preceeded <span class="keyword">by</span> <span class="number">0</span>x, <span class="keyword">then</span> a hex value will be <span class="command">read</span>.
+The  option assumes RFC2406 ESP, <span class="keyword">not</span> RFC1827 ESP.  The option <span class="keyword">is</span> only <span class="keyword">for</span> debugging purposes, <span class="keyword">and</span> <span class="keyword">the</span> use <span class="keyword">of</span> this option <span class="keyword">with</span> a <span class="constant">true</span> ‘secret’ key <span class="keyword">is</span> discouraged.  By presenting IPsec secret key <span class="keyword">onto</span> command line you make <span class="keyword">it</span> visible <span class="keyword">to</span>  others,  via  ps(<span class="number">1</span>) <span class="keyword">and</span> other occasions.
+In addition <span class="keyword">to</span> <span class="keyword">the</span> <span class="keyword">above</span> syntax, <span class="keyword">the</span> syntax <span class="type">file</span> <span class="property">name</span> may be used <span class="keyword">to</span> have tcpdump <span class="command">read</span> <span class="keyword">the</span> provided <span class="type">file</span> <span class="keyword">in</span>. The <span class="type">file</span> <span class="keyword">is</span> opened upon receiving <span class="keyword">the</span> <span class="keyword">first</span> ESP packet, so any special permissions <span class="keyword">that</span> tcpdump may have been <span class="keyword">given</span> should already have been <span class="keyword">given</span> up.
+</code></pre><p><code>-f</code>: </p>
+<pre><code>Print ‘foreign’ IPv4 addresses numerically rather than symbolically (this option <span class="keyword">is</span> intended <span class="keyword">to</span> <span class="keyword">get</span> <span class="keyword">around</span> serious brain damage
+<span class="keyword">in</span> Sun’s NIS server — usually <span class="keyword">it</span> hangs forever translating non-<span class="keyword">local</span> internet numbers).
+
+The test <span class="keyword">for</span> ‘foreign’ IPv4 addresses <span class="keyword">is</span> done using <span class="keyword">the</span> IPv4 address <span class="keyword">and</span> netmask <span class="keyword">of</span> <span class="keyword">the</span> interface <span class="function_start"><span class="keyword">on</span></span>  which  capture  <span class="keyword">is</span>  being
+done.  If <span class="keyword">that</span> address <span class="keyword">or</span> netmask are <span class="keyword">not</span> available, available, either because <span class="keyword">the</span> interface <span class="function_start"><span class="keyword">on</span></span> which capture <span class="keyword">is</span> being done has
+no address <span class="keyword">or</span> netmask <span class="keyword">or</span> because <span class="keyword">the</span> capture <span class="keyword">is</span> being done <span class="function_start"><span class="keyword">on</span></span> <span class="keyword">the</span> Linux <span class="string">"any"</span> interface, which can capture  <span class="function_start"><span class="keyword">on</span></span>  more  than  one
+interface, this option will <span class="keyword">not</span> work correctly.
+</code></pre><p><code>-F</code>: 使用文件中的filter表达式。命令行中的表达式将会被忽略。</p>
+<p><code>-G</code>: </p>
+<pre><code>If  specified,  rotates  <span class="operator">the</span> dump <span class="built_in">file</span> specified <span class="operator">with</span> <span class="operator">the</span> -w option every rotate_seconds <span class="built_in">seconds</span>.  Savefiles will have <span class="operator">the</span> name
+specified <span class="keyword">by</span> -w which should <span class="built_in">include</span> <span class="operator">a</span> <span class="built_in">time</span> <span class="built_in">format</span> <span class="keyword">as</span> defined <span class="keyword">by</span> strftime(<span class="number">3</span>).  If no <span class="built_in">time</span> <span class="built_in">format</span> is specified,  <span class="keyword">each</span>  <span class="built_in">new</span>  <span class="built_in">file</span>
+will overwrite <span class="operator">the</span> previous.
+
+If used <span class="operator">in</span> conjunction <span class="operator">with</span> <span class="operator">the</span> -C option, filenames will take <span class="operator">the</span> form <span class="operator">of</span> ‘<span class="built_in">file</span>&lt;count&gt;’.
+</code></pre><p><code>-i</code>: 监听指定接口。若不指定，则查找最小数标的接口（除loopback外）。</p>
+<pre><code><span class="label">Ties</span> are <span class="keyword">broken </span><span class="keyword">by </span>choosing the earliest match.
+</code></pre><p>在Linux 2.2及以上内核版本中，接口参数<em>‘any’</em>可以用来对所有接口截包。在promiscuous模式下，对<em>‘any’</em>设备截包不起作用。<br>若支持<code>-D</code>标志，则由该标志打印的接口数标可以用来作用接口参数。</p>
+<p><code>-I</code>: 将接口设置为<em>monitor</em>模式。该项只在IEEE 802.11 Wi-Fi接口上提供支持，且只有部分OS支持。</p>
+<pre><code>Note that in<span class="instruction"> monitor </span>mode the adapter might disassociate from the network with which it’s associated, so that you will <span class="instruction"> not </span> be
+able to use any wireless networks with that adapter.  This could prevent accessing files on a network server,<span class="instruction"> or </span>resolving host
+names<span class="instruction"> or </span>network addresses,<span class="instruction"> if </span>you are capturing in<span class="instruction"> monitor </span>mode<span class="instruction"> and </span>are<span class="instruction"> not </span>connected to another network with another adapter.
+
+This flag will affect the output of the -L flag.  If -I isn’t specified, only those link-layer types available when<span class="instruction"> not </span>in mon-
+itor mode will be shown;<span class="instruction"> if </span>-I is specified, only those link-layer types available when in<span class="instruction"> monitor </span>mode will be shown.
+</code></pre><p><code>-K</code>: 不去尝试验证IP/TCP/UDP的checksum值。对于在硬件内部计算checksum的接口很有用（否则验证失败）。</p>
+<p><code>-l</code>: 缓存标准输出行。Make stdout line buffered.  Useful if you want to see the data while capturing it.  E.g.,<br>              ‘‘tcpdump  -l  |  tee dat’’ or ‘‘tcpdump  -l   &gt; dat  &amp;  tail  -f  dat’’.</p>
+<pre><code>-L     List  the  known  data link types for the interface, in the specified mode, and exit.  The list of known data link types may be
+       dependent on the specified mode; for example, on some platforms, a Wi-Fi interface might support one <span class="operator"><span class="keyword">set</span>  <span class="keyword">of</span>  <span class="keyword">data</span>  <span class="keyword">link</span>  types
+       <span class="keyword">when</span>  <span class="keyword">not</span>  <span class="keyword">in</span>  monitor  <span class="keyword">mode</span> (<span class="keyword">for</span> example, it might support <span class="keyword">only</span> fake Ethernet headers, <span class="keyword">or</span> might support <span class="number">802.11</span> headers but <span class="keyword">not</span>
+       support <span class="number">802.11</span> headers <span class="keyword">with</span> radio information) <span class="keyword">and</span> another <span class="keyword">set</span> <span class="keyword">of</span> <span class="keyword">data</span> <span class="keyword">link</span> types <span class="keyword">when</span> <span class="keyword">in</span> monitor <span class="keyword">mode</span> (<span class="keyword">for</span> example,  it  might
+       support <span class="number">802.11</span> headers, <span class="keyword">or</span> <span class="number">802.11</span> headers <span class="keyword">with</span> radio information, <span class="keyword">only</span> <span class="keyword">in</span> monitor <span class="keyword">mode</span>).
+
+-<span class="keyword">m</span>     <span class="keyword">Load</span>  SMI MIB <span class="keyword">module</span> definitions <span class="keyword">from</span> <span class="keyword">file</span> <span class="keyword">module</span>.  This <span class="keyword">option</span> can be used several times <span class="keyword">to</span> <span class="keyword">load</span> several MIB modules <span class="keyword">into</span> tcp-
+       dump.
+
+-<span class="keyword">M</span>     <span class="keyword">Use</span> secret <span class="keyword">as</span> a <span class="keyword">shared</span> secret <span class="keyword">for</span> validating the digests <span class="keyword">found</span> <span class="keyword">in</span> TCP segments <span class="keyword">with</span> the TCP-<span class="keyword">MD5</span> <span class="keyword">option</span> (RFC <span class="number">2385</span>), <span class="keyword">if</span>  <span class="keyword">present</span>.
+
+-<span class="keyword">n</span>     Don’<span class="keyword">t</span> <span class="keyword">convert</span> host addresses <span class="keyword">to</span> <span class="keyword">names</span>.  This can be used <span class="keyword">to</span> avoid DNS lookups.
+
+-nn    Don’<span class="keyword">t</span> <span class="keyword">convert</span> protocol <span class="keyword">and</span> port numbers etc. <span class="keyword">to</span> <span class="keyword">names</span> either.
+
+-<span class="keyword">N</span>     Don’<span class="keyword">t</span>  print  <span class="keyword">domain</span>  <span class="keyword">name</span> qualification <span class="keyword">of</span> host <span class="keyword">names</span>.  <span class="keyword">E</span>.<span class="keyword">g</span>., <span class="keyword">if</span> you give this flag <span class="keyword">then</span> tcpdump will print ‘‘nic’’ instead <span class="keyword">of</span>
+       ‘‘nic.ddn.mil’’.
+
+-O     <span class="keyword">Do</span> <span class="keyword">not</span> run the packet-matching code optimizer.  This <span class="keyword">is</span> useful <span class="keyword">only</span> <span class="keyword">if</span> you suspect a bug <span class="keyword">in</span> the optimizer.
+
+-<span class="keyword">p</span>     Don’<span class="keyword">t</span> put the <span class="keyword">interface</span> <span class="keyword">into</span> promiscuous <span class="keyword">mode</span>.  Note that the <span class="keyword">interface</span> might be <span class="keyword">in</span> promiscuous <span class="keyword">mode</span>  <span class="keyword">for</span>  <span class="keyword">some</span>  other  reason;</span>
+       hence, ‘-p’ cannot be used as an abbreviation for ‘ether host {local-hw-addr} or ether broadcast’.
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Linux/">Linux</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Linux命令/">Linux命令</a>
+  </div>
+
+        <!--%- partial('post/share') %-->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:52programming.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Java文档/">Java文档</a><small>2</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/categories/个人/">个人</a><small>1</small></li>
+  
+    <li><a href="/categories/其他/">其他</a><small>1</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>1</small></li>
+  
+    <li><a href="/categories/数据与日志/">数据与日志</a><small>1</small></li>
+  
+    <li><a href="/categories/网络/">网络</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux命令/">Linux命令</a><small>2</small></li>
+  
+    <li><a href="/tags/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/tags/Spark-SQL/">Spark SQL</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/resume/">resume</a><small>1</small></li>
+  
+    <li><a href="/tags/tcpip/">tcpip</a><small>1</small></li>
+  
+    <li><a href="/tags/文档/">文档</a><small>2</small></li>
+  
+    <li><a href="/tags/日志/">日志</a><small>1</small></li>
+  
+    <li><a href="/tags/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Jeff Hu
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+</body>
+</html>

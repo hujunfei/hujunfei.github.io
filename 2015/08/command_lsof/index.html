@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux命令 - lsof | 52programming</title>
+  <meta name="author" content="Jeff Hu">
+  
+  <meta name="description" content="12345lsof [ -?abChlnNOPRtUvVX ] [ -A A ] [ -c c ] [ +c c ] [ +|-d d ] [ +|-D D ] [ +|-e s ]         [ +|-f [cfgGn] ] [ -F [f] ] [ -g [s] ] [ -i [i] ] ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux命令 - lsof"/>
+  <meta property="og:site_name" content="52programming"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="52programming" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">52programming</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/category">Categories</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-20T13:46:00.000Z"><a href="/2015/08/command_lsof/">2015-08-20</a></time>
+      
+      
+  
+    <h1 class="title">Linux命令 - lsof</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lsof [ -?abChlnNOPRtUvVX ] [ -A A ] [ -c c ] [ +c c ] [ +|<span class="operator">-d</span> d ] [ +|-D D ] [ +|<span class="operator">-e</span> s ] </span><br><span class="line">        [ +|<span class="operator">-f</span> [cfgGn] ] [ -F [f] ] [ -g [s] ] [ -i [i] ] [ -k k ] [ +|-L [l] ] </span><br><span class="line">        [ +|-m m ] [ +|-M ] [ -o [o] ] [ -p s ] [ +|-r [t[m&lt;fmt&gt;]] ] [ <span class="operator">-s</span> [p:s] ] </span><br><span class="line">        [ -S [t] ] [ -T [t] ] [  -u  s  ]  [ +|-w ] [ -x [fl] ] [ -z [z] ] [ -Z [Z] ] </span><br><span class="line">        [ -- ] [names]</span><br></pre></td></tr></table></figure>
+<h2 id="描述"><strong>描述</strong></h2><p>显示进程打开文件信息。</p>
+<h2 id="选项"><strong>选项</strong></h2><p>默认列出所有活动进程打开的所有文件。<br><code>-U</code>显示Unix套接字，<code>-N</code>显示NFS文件，<code>-u</code>指定所属用户。</p>
+<p><code>-? -h</code>: 显示帮助。</p>
+<p><code>-a</code>: 设置选择模式为AND模式。</p>
+<p><code>-A A</code>: </p>
+<pre><code>This option <span class="keyword">is</span> available <span class="function_start"><span class="keyword">on</span></span> systems configured <span class="keyword">for</span> AFS <span class="keyword">whose</span> AFS kernel code <span class="keyword">is</span> implemented via dynamic modules.   It  allows
+<span class="keyword">the</span>  lsof  user <span class="keyword">to</span> specify A <span class="keyword">as</span> an alternate <span class="property">name</span> <span class="type">list</span> <span class="type">file</span> <span class="keyword">where</span> <span class="keyword">the</span> kernel addresses <span class="keyword">of</span> <span class="keyword">the</span> dynamic modules might be found.
+See <span class="keyword">the</span> lsof FAQ (The FAQ section gives <span class="keyword">its</span> location.)  <span class="keyword">for</span> more information <span class="keyword">about</span> dynamic modules, their  symbols,  <span class="keyword">and</span>  how they affect lsof.
+</code></pre><p><code>-b</code>: 该选项避免可能阻塞的内核函数 - lstat(2), readlink(2), and stat(2).<br>参考 <em>BLOCKS AND TIMEOUTS</em> 和 <em>AVOIDING KERNEL BLOCKS</em> 部分。</p>
+<p><code>-c c</code>: 选择以c字符串开头的命令所执行进程的文件。可以指定多个-c选项。它们在指定AND选项前以OR模式设置。<br>若c以‘^’开始，则为取反模式，即指定不以c字符串开头的命令进程。<br>若c以斜线‘/’开始和结束，其中的字符解释为正则表达式。正则表达式中的Shell元字符需要进行转义。结束斜线后可以跟以下字符：</p>
+<ul>
+<li>b: 基本正则表达式  </li>
+<li>i: 忽略大小写  </li>
+<li>x: 扩展正则表达式（默认）<br>先测简单参数，fail之后再测正则表达式。若指定<code>-V</code>选项，会产生‘‘no  command  found  for regex:’’消息提示。</li>
+</ul>
+<p><code>+c w</code>: 显示命令名称的字符数，由UNIX dialect支持。默认是9。许多系统做了最大限制，Linux是15个字符。w为0时，打印最大限制字符数；w小于该列标题‘‘COMMAND’’的大小(7)时，会自动提升至该大小。</p>
+<p><code>-C</code>: 禁止内核命名缓存中的路径名称组件提供报告。参考 <em>KERNEL NAME CACHE</em> 部分。</p>
+<p><code>+d s</code>: 只查找指定目录下进程打开的子目录和文件（不下溯查找）。<code>+D D</code>选项下溯查找目录树。<code>+d</code>选项默认不处理软链接，可以通过指定<code>-x</code>或<code>-x  l</code>选项启用处理软链；默认不处理目录中的挂载点，可以通过指定<code>-x</code>或<code>-x  f</code>选项启用。<br><strong>注意：</strong>权限相关参考系统函数<code>stat(2)</code>.</p>
+<p><code>-d s</code>: 该选项指定一系列排除或包含的输出文件描述符。文件描述符以逗号分隔，如’cwd,1,3’，’^6,^2’。其中不能有任何空格。<br>若集合的所有项以’^’开始，则该列表是排除列表。若没有以’^’开头的项，则列表是包含列表。目前不支持混合列表。<br>文件描述符数字区间表示法，如’0-7’，’3-10’。若以’^’开头，如’^0-7’，则为排除区间，即排除所有0至7之间的文件描述符。<br>设置AND模式前，所有文件描述符数字以OR模式组合。</p>
+<p><code>+D D</code>: 查找目录D下所有打开实例（下溯查找）。默认不下溯软链和挂载点。参考<code>-x</code><code>-x  l</code>，<code>-x  f</code>。<br><strong>注意：</strong>权限相关参考系统函数stat(2)。</p>
+<p><strong>注意：</strong>该选项可能处理较慢，且需要较大的动态内存。原因在于它需要下溯D的整个目录树，对每个文件和目录调用stat(2)，创建所有文件的列表，依照列表查找其中每一个打开的文件。谨慎使用该选项！</p>
+<p><code>-D D</code>: 该选项与lsof处理设备缓存文件功能有关。参考 <em>DEVICE CACHE FILE</em> 部分。<br>后面必须跟一个功能字符，该字符后可跟一个路径。目前支持以下功能字符：</p>
+<ul>
+<li>? - 报告设备缓存文件路径</li>
+<li>b - 构建设备缓存文件</li>
+<li>i - 忽略设备缓存文件</li>
+<li>r - 读取设备缓存文件</li>
+<li>u - 读取并更新设备缓存文件</li>
+</ul>
+<p>后面跟路径的b、r和u有时是受限制的。</p>
+<pre><code>The  b,  r,  and  u functions, accompanied by a path name, are
+sometimes restricted.  When these  functions  are  restricted,
+they  will not appear in the description of the -D option that
+accompanies -h or -?  option output.   See  the  DEVICE  <span class="operator"><span class="keyword">CACHE</span>
+<span class="keyword">FILE</span> <span class="keyword">section</span> <span class="keyword">and</span> the sections that follow it <span class="keyword">for</span> more informa-
+tion <span class="keyword">on</span> these functions <span class="keyword">and</span> <span class="keyword">when</span> they’re <span class="keyword">restricted</span>.
+
+The ?  <span class="keyword">function</span> reports the <span class="keyword">read</span>-<span class="keyword">only</span>  <span class="keyword">and</span>  write  paths  that
+lsof can <span class="keyword">use</span> <span class="keyword">for</span> the device <span class="keyword">cache</span> <span class="keyword">file</span>, the <span class="keyword">names</span> <span class="keyword">of</span> <span class="keyword">any</span> envi-
+ronment <span class="keyword">variables</span> whose <span class="keyword">values</span> lsof will examine <span class="keyword">when</span>  forming
+the  device  <span class="keyword">cache</span>  <span class="keyword">file</span> <span class="keyword">path</span>, <span class="keyword">and</span> the <span class="keyword">format</span> <span class="keyword">for</span> the personal
+device <span class="keyword">cache</span> <span class="keyword">file</span> <span class="keyword">path</span>.  (Escape the  ‘?’  <span class="built_in">character</span>  <span class="keyword">as</span>  your
+shell requires.)
+
+<span class="keyword">When</span>  available,  the b, r, <span class="keyword">and</span> u functions may be followed <span class="keyword">by</span>
+the  device  <span class="keyword">cache</span>  <span class="keyword">file</span>’s  <span class="keyword">path</span>.   The  standard  <span class="keyword">default</span>  <span class="keyword">is</span>
+.lsof_hostname  <span class="keyword">in</span> the home <span class="keyword">directory</span> <span class="keyword">of</span> the <span class="built_in">real</span> <span class="keyword">user</span> <span class="keyword">ID</span> that
+executes lsof, but this could have been <span class="keyword">changed</span> <span class="keyword">when</span> lsof  was
+configured  <span class="keyword">and</span>  <span class="keyword">compiled</span>.   (The  <span class="keyword">output</span>  <span class="keyword">of</span>  the  -h  <span class="keyword">and</span> -?
+options <span class="keyword">show</span> the <span class="keyword">current</span> <span class="keyword">default</span> prefix  -  <span class="keyword">e</span>.<span class="keyword">g</span>.,  ‘‘.lsof’’.)
+The  suffix,  hostname,  <span class="keyword">is</span>  the <span class="keyword">first</span> component <span class="keyword">of</span> the host’s
+<span class="keyword">name</span> returned <span class="keyword">by</span> gethostname(<span class="number">2</span>).
+
+<span class="keyword">When</span> available, the b <span class="keyword">function</span> directs lsof  <span class="keyword">to</span>  <span class="keyword">build</span>  a  <span class="keyword">new</span>
+device <span class="keyword">cache</span> <span class="keyword">file</span> <span class="keyword">at</span> the <span class="keyword">default</span> <span class="keyword">or</span> specified <span class="keyword">path</span>.
+
+The <span class="keyword">i</span> <span class="keyword">function</span> directs lsof <span class="keyword">to</span> <span class="keyword">ignore</span> the <span class="keyword">default</span> device <span class="keyword">cache</span>
+<span class="keyword">file</span> <span class="keyword">and</span> obtain its information about devices via direct calls
+<span class="keyword">to</span> the kernel.
+
+The  r  <span class="keyword">function</span>  directs lsof <span class="keyword">to</span> <span class="keyword">read</span> the device <span class="keyword">cache</span> <span class="keyword">at</span> the
+<span class="keyword">default</span> <span class="keyword">or</span> specified <span class="keyword">path</span>, but prevents it <span class="keyword">from</span> creating a <span class="keyword">new</span>
+device  <span class="keyword">cache</span>  <span class="keyword">file</span>  <span class="keyword">when</span>  <span class="keyword">none</span>  <span class="keyword">exists</span> <span class="keyword">or</span> the existing one <span class="keyword">is</span>
+improperly structured.  The r <span class="keyword">function</span>, <span class="keyword">when</span> specified <span class="keyword">without</span>
+a  <span class="keyword">path</span> <span class="keyword">name</span>, prevents lsof <span class="keyword">from</span> updating an incorrect <span class="keyword">or</span> <span class="keyword">out</span>-
+dated device <span class="keyword">cache</span> <span class="keyword">file</span>, <span class="keyword">or</span> creating a <span class="keyword">new</span> one <span class="keyword">in</span>  its  place.
+The  r <span class="keyword">function</span> <span class="keyword">is</span> <span class="keyword">always</span> available <span class="keyword">when</span> it <span class="keyword">is</span> specified <span class="keyword">with</span>-
+<span class="keyword">out</span> a <span class="keyword">path</span> <span class="keyword">name</span> argument;</span> it may be restricted by the  permis-
+sions of the lsof process.
+
+When available, the u function directs lsof to read the device
+<span class="operator"><span class="keyword">cache</span> <span class="keyword">file</span> <span class="keyword">at</span> the <span class="keyword">default</span> <span class="keyword">or</span> specified <span class="keyword">path</span>, <span class="keyword">if</span> possible,  <span class="keyword">and</span>
+<span class="keyword">to</span> <span class="keyword">rebuild</span> it, <span class="keyword">if</span> necessary.  This <span class="keyword">is</span> the <span class="keyword">default</span> device <span class="keyword">cache</span>
+<span class="keyword">file</span> <span class="keyword">function</span> <span class="keyword">when</span> <span class="keyword">no</span> -<span class="keyword">D</span> <span class="keyword">option</span> has been specified.</span>
+</code></pre><p><code>+|-e s</code>: 剔除已提交到可能阻塞的内核函数调用的文件系统路径。<code>+e</code>剔除<code>stat(2)</code>，<code>lstat(2)</code>和<code>readlink(2)</code>。<code>-e</code>只剔除<code>stat(2)</code>，<code>lstat(2)</code>。多数文件系统将两个选项分开，每个选项都可以剔除<code>readlink(2)</code>调用。<br>目前仅Linux支持该选项。</p>
+<pre><code>         CAUTION: this option can easily be mis-applied to  other  than
+         the  file system of interest, because it uses path name rather
+         than the more reliable device and inode numbers.  (Device  and
+         inode  numbers  are  acquired  via  the  potentially  blocking
+         stat(2) kernel <span class="operator"><span class="keyword">call</span> <span class="keyword">and</span> <span class="keyword">are</span> thus <span class="keyword">not</span> available,  but  see  the
+         +|-<span class="keyword">m</span>  <span class="keyword">m</span>  <span class="keyword">option</span> <span class="keyword">as</span> a possible alternative way <span class="keyword">to</span> supply device
+         numbers.)
+
+         <span class="keyword">Use</span> this <span class="keyword">option</span> <span class="keyword">with</span> great care <span class="keyword">and</span>  fully  specify  the  <span class="keyword">path</span>
+         <span class="keyword">name</span>  <span class="keyword">of</span>  the <span class="keyword">file</span> <span class="keyword">system</span> <span class="keyword">to</span> be exempted.  <span class="keyword">Consider</span>, <span class="keyword">for</span> exam-
+         ple, that specifying ‘‘-<span class="keyword">e</span> /’’ would <span class="keyword">exempt</span> all  <span class="keyword">file</span>  systems,
+         since all their paths <span class="keyword">begin</span> <span class="keyword">with</span> a ‘/’.
+
+         <span class="keyword">When</span>  <span class="keyword">open</span>  files <span class="keyword">on</span> exempted <span class="keyword">file</span> systems <span class="keyword">are</span> reported, it <span class="keyword">is</span>
+         <span class="keyword">not</span> possible <span class="keyword">to</span> obtain all their information.  Therefore, <span class="keyword">some</span>
+         information  <span class="keyword">columns</span>  will  be  blank, the <span class="keyword">characters</span> ‘‘UNKN’’
+         preface the <span class="keyword">values</span> <span class="keyword">in</span> the  <span class="keyword">TYPE</span>  <span class="keyword">column</span>,  <span class="keyword">and</span>  the  applicable
+         exemption  <span class="keyword">option</span>  <span class="keyword">is</span>  added  <span class="keyword">in</span> parentheses <span class="keyword">to</span> the <span class="keyword">end</span> <span class="keyword">of</span> the
+         <span class="keyword">NAME</span> <span class="keyword">column</span>.  <span class="keyword">Some</span> device <span class="built_in">number</span>  information  might  be  made
+         available via the +|-<span class="keyword">m</span> <span class="keyword">m</span> <span class="keyword">option</span>.
+
++|-<span class="keyword">f</span> [cfgGn]
+         <span class="keyword">f</span> <span class="keyword">by</span> itself clarifies how <span class="keyword">path</span> <span class="keyword">name</span> arguments <span class="keyword">are</span> <span class="keyword">to</span> be inter-
+         preted.  <span class="keyword">When</span> followed <span class="keyword">by</span> <span class="keyword">c</span>, <span class="keyword">f</span>, <span class="keyword">g</span>, <span class="keyword">G</span>, <span class="keyword">or</span> <span class="keyword">n</span> <span class="keyword">in</span> <span class="keyword">any</span>  combination
+         it  specifies that the listing <span class="keyword">of</span> kernel <span class="keyword">file</span> structure infor-
+         mation <span class="keyword">is</span> <span class="keyword">to</span> be enabled (‘+’) <span class="keyword">or</span> inhibited (‘-’).
+
+         Normally a <span class="keyword">path</span> <span class="keyword">name</span> argument <span class="keyword">is</span> taken <span class="keyword">to</span>  be  a  <span class="keyword">file</span>  <span class="keyword">system</span>
+         <span class="keyword">name</span>  <span class="keyword">if</span>  it  matches  a mounted-<span class="keyword">on</span> <span class="keyword">directory</span> <span class="keyword">name</span> reported <span class="keyword">by</span>
+         <span class="keyword">mount</span>(<span class="number">8</span>), <span class="keyword">or</span> <span class="keyword">if</span> it represents a <span class="keyword">block</span>  device,  named  <span class="keyword">in</span>  the
+         <span class="keyword">mount</span>  <span class="keyword">output</span>  <span class="keyword">and</span>  associated  <span class="keyword">with</span> a mounted <span class="keyword">directory</span> <span class="keyword">name</span>.
+         <span class="keyword">When</span> +<span class="keyword">f</span> <span class="keyword">is</span> specified, all <span class="keyword">path</span> <span class="keyword">name</span> arguments will be taken <span class="keyword">to</span>
+         be  <span class="keyword">file</span>  <span class="keyword">system</span> <span class="keyword">names</span>, <span class="keyword">and</span> lsof will complain <span class="keyword">if</span> <span class="keyword">any</span> <span class="keyword">are</span> <span class="keyword">not</span>.
+         This can be useful, <span class="keyword">for</span> example, <span class="keyword">when</span>  the  <span class="keyword">file</span>  <span class="keyword">system</span>  <span class="keyword">name</span>
+         (mounted-<span class="keyword">on</span>  device)  isn’<span class="keyword">t</span>  a <span class="keyword">block</span> device.  This happens <span class="keyword">for</span>
+         <span class="keyword">some</span> CD-ROM <span class="keyword">file</span> systems.
+
+         <span class="keyword">When</span> -<span class="keyword">f</span> <span class="keyword">is</span> specified <span class="keyword">by</span> itself, all <span class="keyword">path</span> <span class="keyword">name</span>  arguments  will
+         be  taken  <span class="keyword">to</span> be simple files.  Thus, <span class="keyword">for</span> example, the ‘‘-<span class="keyword">f</span> <span class="comment">--</span>
+         /’’ arguments direct lsof <span class="keyword">to</span> <span class="keyword">search</span> <span class="keyword">for</span> <span class="keyword">open</span> files <span class="keyword">with</span> a  ‘/’
+         <span class="keyword">path</span> <span class="keyword">name</span>, <span class="keyword">not</span> all <span class="keyword">open</span> files <span class="keyword">in</span> the ‘/’ (root) <span class="keyword">file</span> <span class="keyword">system</span>.
+
+         Be  careful <span class="keyword">to</span> make sure +<span class="keyword">f</span> <span class="keyword">and</span> -<span class="keyword">f</span> <span class="keyword">are</span> properly <span class="keyword">terminated</span> <span class="keyword">and</span>
+         aren’<span class="keyword">t</span> followed <span class="keyword">by</span> a <span class="built_in">character</span> (<span class="keyword">e</span>.<span class="keyword">g</span>., <span class="keyword">of</span> the <span class="keyword">file</span> <span class="keyword">or</span> <span class="keyword">file</span> <span class="keyword">sys</span>-
+         tem  <span class="keyword">name</span>)  that  might be taken <span class="keyword">as</span> a parameter.  <span class="keyword">For</span> example,
+         <span class="keyword">use</span> ‘‘<span class="comment">--’’ after +f and -f as in these examples.</span>
+
+              $ lsof +<span class="keyword">f</span> <span class="comment">-- /file/system/name</span>
+              $ lsof -<span class="keyword">f</span> <span class="comment">-- /file/name</span>
+
+         The  listing  <span class="keyword">of</span>  information  <span class="keyword">from</span>  kernel  <span class="keyword">file</span>  structures,</span>
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Linux/">Linux</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Linux命令/">Linux命令</a>
+  </div>
+
+        <!--%- partial('post/share') %-->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:52programming.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Java文档/">Java文档</a><small>2</small></li>
+  
+    <li><a href="/categories/Linux/">Linux</a><small>2</small></li>
+  
+    <li><a href="/categories/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/categories/个人/">个人</a><small>1</small></li>
+  
+    <li><a href="/categories/其他/">其他</a><small>1</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>1</small></li>
+  
+    <li><a href="/categories/数据与日志/">数据与日志</a><small>1</small></li>
+  
+    <li><a href="/categories/网络/">网络</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux命令/">Linux命令</a><small>2</small></li>
+  
+    <li><a href="/tags/Spark/">Spark</a><small>1</small></li>
+  
+    <li><a href="/tags/Spark-SQL/">Spark SQL</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/resume/">resume</a><small>1</small></li>
+  
+    <li><a href="/tags/tcpip/">tcpip</a><small>1</small></li>
+  
+    <li><a href="/tags/文档/">文档</a><small>2</small></li>
+  
+    <li><a href="/tags/日志/">日志</a><small>1</small></li>
+  
+    <li><a href="/tags/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Jeff Hu
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+</body>
+</html>

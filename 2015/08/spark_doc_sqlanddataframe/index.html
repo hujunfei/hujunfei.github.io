@@ -3,13 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>个人 | 52programming</title>
+  <title>Spark - Spark SQL and DataFrame | 52programming</title>
   <meta name="author" content="Jeff Hu">
+  
+  <meta name="description" content="DataFrame为编程抽象及SQL查询引擎。
+DataFrame带有列名的分布式数据集合，相当于关系型数据库中的表或R/Python中的data frame。四种API：Scala, Java, Python, R
+SQLContext及其子类Spark SQL的起点。
+HiveContextSQ">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Spark - Spark SQL and DataFrame"/>
   <meta property="og:site_name" content="52programming"/>
 
   
@@ -44,25 +49,53 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title category">个人</h2>
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-08-27T15:28:00.000Z"><a href="/2015/08/spark_doc_sqlanddataframe/">2015-08-27</a></time>
+      
+      
+  
+    <h1 class="title">Spark - Spark SQL and DataFrame</h1>
+  
 
-
-  <div class="archive">
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2015-07-23T15:33:15.000Z"><a href="/2015/07/resume/">2015-07-23</a></time>
-            
-              <h1 class="title"><a href="/2015/07/resume/">个人简介</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
+    </header>
+    <div class="entry">
+      
+        <p>DataFrame为编程抽象及SQL查询引擎。</p>
+<h2 id="DataFrame">DataFrame</h2><p>带有列名的分布式数据集合，相当于关系型数据库中的表或R/Python中的data frame。<br>四种API：Scala, Java, Python, R</p>
+<h3 id="SQLContext及其子类">SQLContext及其子类</h3><p>Spark SQL的起点。</p>
+<h3 id="HiveContext">HiveContext</h3><p>SQLContext的子类。可以使用HiveQL解析器，访问Hive的UDF，读取Hive表。<br>不需要安装Hive。（未来可能并入SQLContext）</p>
+<p>可以选择SQL解析器，SQLContext只有一种选择，HiveContext有两种……</p>
+<h2 id="示例">示例</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc</span>:</span> <span class="type">SparkContext</span> <span class="comment">// An existing SparkContext.</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sqlContext</span> =</span> <span class="keyword">new</span> org.apache.spark.sql.<span class="type">SQLContext</span>(sc)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">df</span> =</span> sqlContext.read.json(<span class="string">"examples/src/main/resources/people.json"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="解析sqlContext-read_-_DataFrameReader(@Experimental)">解析sqlContext.read - DataFrameReader(@Experimental)</h2>
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Spark/">Spark</a>
   </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Spark/">Spark</a>, <a href="/tags/Spark-SQL/">Spark SQL</a>
+  </div>
+
+        <!--%- partial('post/share') %-->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
 </div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
